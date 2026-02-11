@@ -16,7 +16,7 @@ export default function Home() {
   const [events, setEvents] = useState<StoreEvent[]>([]);
   const [intensityLevel, setIntensityLevel] = useState<'calm' | 'normal' | 'busy'>('normal');
   const [store, setStore] = useState('allbirds.myshopify.com');
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [theme, setTheme] = useState<'dark' | 'light'>('light');
   const [mounted, setMounted] = useState(false);
 
   const engineRef = useRef<AudioEngine | null>(null);
@@ -24,15 +24,13 @@ export default function Home() {
 
   useEffect(() => {
     setMounted(true);
-    // Check for saved theme preference or system preference
     try {
       const savedTheme = localStorage.getItem('theme') as 'dark' | 'light' | null;
-      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+      const initialTheme = savedTheme || 'light';
       setTheme(initialTheme);
       document.documentElement.setAttribute('data-theme', initialTheme);
     } catch {
-      document.documentElement.setAttribute('data-theme', 'dark');
+      document.documentElement.setAttribute('data-theme', 'light');
     }
   }, []);
 
@@ -97,22 +95,32 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[var(--background)] p-4 md:p-8">
+    <div className="min-h-screen bg-[var(--background)] p-4 md:p-6">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <header className="mb-8">
+        {/* Header - Hardware style top panel */}
+        <header className="te-panel p-4 mb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-2 h-2 bg-[var(--accent)]" />
-              <h1 className="text-sm font-mono uppercase tracking-[0.2em] text-[var(--foreground)]">
-                Store Soundscape
-              </h1>
+              {/* Decorative ports */}
+              <div className="hidden sm:flex items-center gap-2">
+                <div className="te-port" />
+                <div className="te-port" />
+              </div>
+              <div>
+                <h1 className="te-title text-[var(--foreground)]">
+                  Store Soundscape
+                </h1>
+                <p className="text-[9px] font-medium uppercase tracking-wider text-[var(--muted)]">
+                  Generative Audio Machine
+                </p>
+              </div>
             </div>
-            <ThemeToggle theme={theme} onToggle={handleThemeToggle} />
+            <div className="flex items-center gap-3">
+              <ThemeToggle theme={theme} onToggle={handleThemeToggle} />
+              {/* Decorative speaker grille */}
+              <div className="hidden md:block w-16 h-10 te-grille opacity-50" />
+            </div>
           </div>
-          <p className="text-xs font-mono text-[var(--muted)] ml-6 mt-2">
-            Generative audio from commerce events
-          </p>
         </header>
 
         {/* Main Grid */}
@@ -122,7 +130,7 @@ export default function Home() {
             <StoreSelector value={store} onChange={handleStoreChange} />
 
             {/* Mode Selector */}
-            <div className="te-panel p-6">
+            <div className="te-panel p-5">
               <div className="flex items-center justify-between mb-4">
                 <span className="te-label">Mode</span>
               </div>
@@ -131,7 +139,7 @@ export default function Home() {
                   <button
                     key={level}
                     onClick={() => handleIntensityChange(level)}
-                    className={`te-button py-3 ${
+                    className={`te-button py-3 text-[9px] ${
                       intensityLevel === level ? 'te-button-primary' : ''
                     }`}
                   >
@@ -154,38 +162,52 @@ export default function Home() {
             <IntensityMeter intensity={intensity} />
 
             {/* Sound Guide */}
-            <div className="te-panel p-6">
+            <div className="te-panel p-5">
               <div className="flex items-center justify-between mb-4">
                 <span className="te-label">Voices</span>
               </div>
-              <div className="space-y-3">
-                {[
-                  { symbol: '○', name: 'Pad', desc: 'Page views' },
-                  { symbol: '◇', name: 'Arp', desc: 'Searches' },
-                  { symbol: '□', name: 'Perc', desc: 'Add to cart' },
-                  { symbol: '●', name: 'Choir', desc: 'Orders' },
-                ].map(({ symbol, name, desc }) => (
-                  <div key={name} className="flex items-center gap-4 text-xs font-mono">
-                    <span className="text-[var(--accent)] w-4">{symbol}</span>
-                    <span className="text-[var(--foreground)] w-12">{name}</span>
-                    <span className="text-[var(--muted)]">{desc}</span>
-                  </div>
-                ))}
+              <div className="te-display p-3">
+                <div className="space-y-2">
+                  {[
+                    { symbol: '○', name: 'PAD', desc: 'Page views', color: 'text-[var(--display-text)]' },
+                    { symbol: '◇', name: 'ARP', desc: 'Searches', color: 'text-cyan-400' },
+                    { symbol: '□', name: 'PERC', desc: 'Add to cart', color: 'text-yellow-400' },
+                    { symbol: '●', name: 'CHOIR', desc: 'Orders', color: 'text-[var(--accent)]' },
+                  ].map(({ symbol, name, desc, color }) => (
+                    <div key={name} className="flex items-center gap-3 text-[10px] font-mono">
+                      <span className={`${color} w-4 text-center`}>{symbol}</span>
+                      <span className="te-display-text w-12 font-bold">{name}</span>
+                      <span className="te-display-text opacity-60">{desc}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
 
           {/* Right Column - Event Log */}
           <div className="lg:col-span-5">
-            <EventLog events={events} maxEvents={12} />
+            <EventLog events={events} maxEvents={10} />
           </div>
         </div>
 
-        {/* Footer */}
-        <footer className="mt-8 pt-4 border-t border-[var(--border)]">
-          <div className="flex items-center justify-between text-xs font-mono text-[var(--muted)]">
-            <span>Next.js + Tone.js</span>
-            <span>v1.0.0</span>
+        {/* Footer - Bottom panel with ports */}
+        <footer className="te-panel p-3 mt-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <div className="te-port" />
+                <span className="te-label text-[8px]">Output</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="te-port" />
+                <span className="te-label text-[8px]">Sync</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <span className="te-label text-[8px]">Next.js + Tone.js</span>
+              <span className="te-label text-[8px]">v1.0.0</span>
+            </div>
           </div>
         </footer>
       </div>

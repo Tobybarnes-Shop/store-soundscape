@@ -62,12 +62,23 @@ export default function StoreSelector({ value, onChange }: StoreSelectorProps) {
   };
 
   return (
-    <div className="te-panel p-6">
+    <div className="te-panel p-5">
       <div className="flex items-center justify-between mb-4">
         <span className="te-label">Store</span>
-        <div className="te-led active" />
+        <div className="flex items-center gap-2">
+          <div className="te-led green" />
+          <span className="text-[9px] font-bold uppercase text-[var(--muted)]">Live</span>
+        </div>
       </div>
 
+      {/* Display showing current store */}
+      <div className="te-display p-3 mb-3">
+        <div className="te-display-text text-xs truncate">
+          {value || 'NO STORE'}
+        </div>
+      </div>
+
+      {/* Input */}
       <div className="relative">
         <input
           ref={inputRef}
@@ -79,19 +90,19 @@ export default function StoreSelector({ value, onChange }: StoreSelectorProps) {
             if (e.key === 'Enter') handleSubmit();
           }}
           placeholder="Enter store URL..."
-          className="w-full bg-[var(--background)] border border-[var(--border)] px-3 py-2 text-sm font-mono focus:outline-none focus:border-[var(--accent)] transition-colors"
+          className="w-full te-display px-3 py-2 text-xs te-display-text focus:outline-none focus:ring-1 focus:ring-[var(--accent-green)]"
         />
 
         {isOpen && filteredStores.length > 0 && (
           <div
             ref={dropdownRef}
-            className="absolute top-full left-0 right-0 mt-1 bg-[var(--surface)] border border-[var(--border)] z-10 max-h-48 overflow-y-auto"
+            className="absolute top-full left-0 right-0 mt-1 te-display z-10 max-h-40 overflow-y-auto"
           >
             {filteredStores.map((store) => (
               <button
                 key={store}
                 onClick={() => handleSelect(store)}
-                className="w-full text-left px-3 py-2 text-xs font-mono hover:bg-[var(--border)] transition-colors text-[var(--muted)] hover:text-[var(--foreground)]"
+                className="w-full text-left px-3 py-2 text-[10px] te-display-text hover:bg-[var(--accent-green)]/20 transition-colors"
               >
                 {store}
               </button>
@@ -100,8 +111,8 @@ export default function StoreSelector({ value, onChange }: StoreSelectorProps) {
         )}
       </div>
 
-      <p className="te-label mt-3 text-[var(--muted)]">
-        Demo mode • Simulated events
+      <p className="te-label mt-3 text-[8px]">
+        Demo Mode • Simulated Events
       </p>
     </div>
   );
