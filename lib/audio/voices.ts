@@ -32,7 +32,7 @@ export function createPianoVoice(): Voice {
       reverb.dispose();
     },
     setVolume: (volume: number) => {
-      synth.volume.value = volume * 30 - 30; // -30 to 0 dB
+      synth.volume.value = volume === 0 ? -Infinity : volume * 40 - 40; // mute at 0, otherwise -40 to 0 dB
     },
   };
 }

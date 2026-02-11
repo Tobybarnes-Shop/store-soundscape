@@ -134,24 +134,14 @@ export default function Home() {
 
         {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-          {/* Row 1: Store + Activity + Event Log */}
-          <div className="lg:col-span-3">
+          {/* Left Column: Store + Store Traffic stacked */}
+          <div className="lg:col-span-3 flex flex-col gap-4 lg:h-[280px]">
             <StoreSelector value={store} onChange={handleStoreChange} />
-          </div>
-          <div className="lg:col-span-4">
-            <IntensityMeter intensity={intensity} />
-          </div>
-          <div className="lg:col-span-5 lg:row-span-2">
-            <EventLog events={events} maxEvents={12} />
-          </div>
-
-          {/* Row 2: Store Traffic */}
-          <div className="lg:col-span-7">
-            <div className="te-panel p-4">
+            <div className="te-panel p-4 flex-1">
               <div className="flex items-center justify-between mb-3">
                 <span className="te-label">Store Traffic</span>
               </div>
-              <div className="grid grid-cols-3 gap-1 max-w-xs">
+              <div className="grid grid-cols-3 gap-1">
                 {(['calm', 'normal', 'busy'] as const).map((level) => (
                   <button
                     key={level}
@@ -166,11 +156,21 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+          {/* Middle: Activity */}
+          <div className="lg:col-span-4 lg:h-[280px]">
+            <IntensityMeter intensity={intensity} />
+          </div>
+
+          {/* Right: Mixer */}
+          <div className="lg:col-span-5 lg:h-[280px]">
+            <Mixer engine={engineRef.current} />
+          </div>
         </div>
 
-        {/* Mixer */}
+        {/* Event Log - Full width */}
         <div className="mt-4">
-          <Mixer engine={engineRef.current} />
+          <EventLog events={events} maxEvents={8} />
         </div>
 
         {/* Footer - Bottom panel with ports */}

@@ -34,7 +34,7 @@ export default function Mixer({ engine }: MixerProps) {
   );
 
   return (
-    <div className="te-panel p-4">
+    <div className="te-panel p-4 h-full">
       <div className="flex items-center justify-between mb-4">
         <span className="te-label">Mixer</span>
       </div>
