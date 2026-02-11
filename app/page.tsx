@@ -135,60 +135,65 @@ export default function Home() {
 
         {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-          {/* Row 1: Store + Activity */}
-          <div className="lg:col-span-3">
-            <StoreSelector value={store} onChange={handleStoreChange} />
-          </div>
-          <div className="lg:col-span-4">
-            <IntensityMeter intensity={intensity} />
-          </div>
-          <div className="lg:col-span-5">
-            <EventLog events={events} maxEvents={10} />
-          </div>
-
-          {/* Row 2: Store Traffic + Voices (same height) */}
-          <div className="lg:col-span-3">
-            <div className="te-panel p-4 h-full">
-              <div className="flex items-center justify-between mb-3">
-                <span className="te-label">Store Traffic</span>
-              </div>
-              <div className="grid grid-cols-3 gap-1">
-                {(['calm', 'normal', 'busy'] as const).map((level) => (
-                  <button
-                    key={level}
-                    onClick={() => handleIntensityChange(level)}
-                    className={`te-button py-2 text-[8px] ${
-                      intensityLevel === level ? 'te-button-primary' : ''
-                    }`}
-                  >
-                    {level}
-                  </button>
-                ))}
-              </div>
+          {/* LEFT COLUMN: Store, Activity, Traffic, Voices */}
+          <div className="lg:col-span-7 grid grid-cols-1 lg:grid-cols-7 gap-4">
+            {/* Row 1: Store + Activity (compact) */}
+            <div className="lg:col-span-3">
+              <StoreSelector value={store} onChange={handleStoreChange} />
             </div>
-          </div>
-          <div className="lg:col-span-4">
-            <div className="te-panel p-4 h-full">
-              <div className="flex items-center justify-between mb-3">
-                <span className="te-label">Voices</span>
-              </div>
-              <div className="te-display p-2">
-                <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-                  {[
-                    { symbol: '○', name: 'PAD', desc: 'Views', color: 'text-[var(--display-text)]' },
-                    { symbol: '◇', name: 'ARP', desc: 'Search', color: 'text-cyan-400' },
-                    { symbol: '□', name: 'PERC', desc: 'Cart', color: 'text-yellow-400' },
-                    { symbol: '●', name: 'CHOIR', desc: 'Order', color: 'text-[var(--accent)]' },
-                  ].map(({ symbol, name, desc, color }) => (
-                    <div key={name} className="flex items-center gap-2 text-[9px] font-mono">
-                      <span className={`${color} w-3 text-center`}>{symbol}</span>
-                      <span className="te-display-text font-bold">{name}</span>
-                      <span className="te-display-text opacity-50 text-[8px]">{desc}</span>
-                    </div>
+            <div className="lg:col-span-4">
+              <IntensityMeter intensity={intensity} />
+            </div>
+
+            {/* Row 2: Store Traffic + Voices */}
+            <div className="lg:col-span-3">
+              <div className="te-panel p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="te-label">Store Traffic</span>
+                </div>
+                <div className="grid grid-cols-3 gap-1">
+                  {(['calm', 'normal', 'busy'] as const).map((level) => (
+                    <button
+                      key={level}
+                      onClick={() => handleIntensityChange(level)}
+                      className={`te-button py-2 text-[8px] ${
+                        intensityLevel === level ? 'te-button-primary' : ''
+                      }`}
+                    >
+                      {level}
+                    </button>
                   ))}
                 </div>
               </div>
             </div>
+            <div className="lg:col-span-4">
+              <div className="te-panel p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="te-label">Voices</span>
+                </div>
+                <div className="te-display p-2">
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                    {[
+                      { symbol: '○', name: 'PAD', desc: 'Views', color: 'text-[var(--display-text)]' },
+                      { symbol: '◇', name: 'ARP', desc: 'Search', color: 'text-cyan-400' },
+                      { symbol: '□', name: 'PERC', desc: 'Cart', color: 'text-yellow-400' },
+                      { symbol: '●', name: 'CHOIR', desc: 'Order', color: 'text-[var(--accent)]' },
+                    ].map(({ symbol, name, desc, color }) => (
+                      <div key={name} className="flex items-center gap-2 text-[9px] font-mono">
+                        <span className={`${color} w-3 text-center`}>{symbol}</span>
+                        <span className="te-display-text font-bold">{name}</span>
+                        <span className="te-display-text opacity-50 text-[8px]">{desc}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN: Event Log (spans full height) */}
+          <div className="lg:col-span-5">
+            <EventLog events={events} maxEvents={12} />
           </div>
         </div>
 

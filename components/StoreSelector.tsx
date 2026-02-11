@@ -62,7 +62,7 @@ export default function StoreSelector({ value, onChange }: StoreSelectorProps) {
   };
 
   return (
-    <div className="te-panel p-5 h-full">
+    <div className="te-panel p-4">
       <div className="flex items-center justify-between mb-3">
         <span className="te-label">Store</span>
         <div className="flex items-center gap-2">

@@ -9,7 +9,7 @@ export default function IntensityMeter({ intensity }: IntensityMeterProps) {
   const filledSegments = Math.round(intensity * segments);
 
   return (
-    <div className="te-panel p-5 h-full">
+    <div className="te-panel p-4">
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <span className="te-label">Activity</span>
