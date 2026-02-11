@@ -33,47 +33,26 @@ export default function Mixer({ engine }: MixerProps) {
     return initial;
   });
 
-  const [soloed, setSoloed] = useState<string | null>(null);
-
-  const applyVolume = useCallback((voiceKey: string, volume: number, isMuted: boolean, soloKey: string | null) => {
+  const applyVolume = useCallback((voiceKey: string, volume: number, isMuted: boolean) => {
     if (!engine) return;
-
-    // If something is soloed and this isn't it, mute it
-    if (soloKey && soloKey !== voiceKey) {
-      engine.setVoiceVolume(voiceKey, 0);
-    } else if (isMuted) {
-      engine.setVoiceVolume(voiceKey, 0);
-    } else {
-      engine.setVoiceVolume(voiceKey, volume);
-    }
+    engine.setVoiceVolume(voiceKey, isMuted ? 0 : volume);
   }, [engine]);
 
   const handleVolumeChange = useCallback(
     (voiceKey: string, value: number) => {
       setVolumes((prev) => ({ ...prev, [voiceKey]: value }));
-      applyVolume(voiceKey, value, muted[voiceKey], soloed);
+      applyVolume(voiceKey, value, muted[voiceKey]);
     },
-    [applyVolume, muted, soloed]
+    [applyVolume, muted]
   );
 
   const handleMute = useCallback((voiceKey: string) => {
     setMuted((prev) => {
       const newMuted = { ...prev, [voiceKey]: !prev[voiceKey] };
-      applyVolume(voiceKey, volumes[voiceKey], newMuted[voiceKey], soloed);
+      applyVolume(voiceKey, volumes[voiceKey], newMuted[voiceKey]);
       return newMuted;
     });
-  }, [applyVolume, volumes, soloed]);
-
-  const handleSolo = useCallback((voiceKey: string) => {
-    setSoloed((prev) => {
-      const newSolo = prev === voiceKey ? null : voiceKey;
-      // Apply to all voices
-      VOICE_CONFIG.forEach((v) => {
-        applyVolume(v.key, volumes[v.key], muted[v.key], newSolo);
-      });
-      return newSolo;
-    });
-  }, [applyVolume, volumes, muted]);
+  }, [applyVolume, volumes]);
 
   return (
     <div className="te-panel p-3 h-full overflow-hidden flex flex-col">
@@ -84,13 +63,11 @@ export default function Mixer({ engine }: MixerProps) {
       <div className="grid grid-cols-6 gap-1 flex-1 min-h-0">
         {VOICE_CONFIG.map(({ key, name, symbol, color }) => {
           const isMuted = muted[key];
-          const isSoloed = soloed === key;
-          const isOtherSoloed = soloed && soloed !== key;
 
           return (
             <div key={key} className="flex flex-col min-h-0">
               {/* Channel strip */}
-              <div className={`te-display p-1.5 w-full flex-1 flex flex-col items-center min-h-0 ${isOtherSoloed ? 'opacity-40' : ''}`}>
+              <div className="te-display p-1.5 w-full flex-1 flex flex-col items-center min-h-0">
                 {/* Symbol */}
                 <span className="text-sm flex-shrink-0">{symbol}</span>
 
@@ -117,29 +94,19 @@ export default function Mixer({ engine }: MixerProps) {
                 <div className="w-full h-1 rounded-full bg-[var(--display-bg)] overflow-hidden flex-shrink-0">
                   <div
                     className={`h-full ${color} transition-all duration-100`}
-                    style={{ width: `${(isMuted || isOtherSoloed) ? 0 : volumes[key] * 100}%` }}
+                    style={{ width: `${isMuted ? 0 : volumes[key] * 100}%` }}
                   />
                 </div>
 
-                {/* Mute/Solo buttons */}
-                <div className="flex gap-0.5 mt-1 flex-shrink-0">
-                  <button
-                    onClick={() => handleMute(key)}
-                    className={`px-1.5 py-0.5 text-[7px] font-bold rounded ${
-                      isMuted ? 'bg-red-500 text-white' : 'bg-[var(--surface-raised)] text-[var(--muted)]'
-                    }`}
-                  >
-                    M
-                  </button>
-                  <button
-                    onClick={() => handleSolo(key)}
-                    className={`px-1.5 py-0.5 text-[7px] font-bold rounded ${
-                      isSoloed ? 'bg-yellow-500 text-black' : 'bg-[var(--surface-raised)] text-[var(--muted)]'
-                    }`}
-                  >
-                    S
-                  </button>
-                </div>
+                {/* Mute button */}
+                <button
+                  onClick={() => handleMute(key)}
+                  className={`mt-1 px-2 py-0.5 text-[7px] font-bold rounded flex-shrink-0 ${
+                    isMuted ? 'bg-red-500 text-white' : 'bg-[var(--surface-raised)] text-[var(--muted)]'
+                  }`}
+                >
+                  M
+                </button>
               </div>
 
               {/* Label */}
