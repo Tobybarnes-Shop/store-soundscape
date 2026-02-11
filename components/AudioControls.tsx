@@ -31,24 +31,13 @@ export default function AudioControls({
   const isStarting = state === 'starting';
 
   return (
-    <div className="te-panel p-5">
-      {/* Header row with label and LED */}
-      <div className="flex items-center justify-between mb-5">
-        <span className="te-label">System</span>
-        <div className="flex items-center gap-2">
-          <div className={`te-led ${isRunning ? 'active' : ''}`} />
-          <span className="text-[9px] font-bold uppercase text-[var(--muted)]">
-            {isRunning ? 'On' : 'Off'}
-          </span>
-        </div>
-      </div>
-
-      {/* Play/Stop Button - Large circular */}
-      <div className="flex justify-center mb-5">
+    <div className="te-panel p-4">
+      <div className="flex items-center gap-6">
+        {/* Play/Stop Button - Left side */}
         <button
           onClick={isRunning ? onStop : onStart}
           disabled={isStarting}
-          className={`te-button-play flex items-center justify-center ${
+          className={`te-button-play w-12 h-12 flex items-center justify-center flex-shrink-0 ${
             isStarting ? 'opacity-50 cursor-not-allowed' : ''
           } ${isRunning ? 'bg-[var(--accent-green)]' : ''}`}
           style={{
@@ -58,39 +47,46 @@ export default function AudioControls({
           }}
         >
           {isStarting ? (
-            <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
           ) : isRunning ? (
-            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
               <rect x="6" y="4" width="4" height="16" />
               <rect x="14" y="4" width="4" height="16" />
             </svg>
           ) : (
-            <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
               <polygon points="5,3 19,12 5,21" />
             </svg>
           )}
         </button>
-      </div>
 
-      {/* Volume Control */}
-      <div>
-        <div className="flex items-center justify-between mb-2">
-          <span className="te-label">Volume</span>
+        {/* Status */}
+        <div className="flex items-center gap-2">
+          <div className={`te-led ${isRunning ? 'active' : ''}`} />
+          <span className="te-label">{isRunning ? 'Running' : 'Stopped'}</span>
+        </div>
+
+        {/* Spacer */}
+        <div className="flex-1" />
+
+        {/* Volume Control */}
+        <div className="flex items-center gap-3">
+          <span className="te-label">Vol</span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={volume}
+            onChange={handleVolumeChange}
+            className="w-24"
+          />
           <div className="te-display px-2 py-1 rounded">
-            <span className="te-display-text text-xs font-bold">
+            <span className="te-display-text text-[10px] font-bold">
               {Math.round(volume * 100).toString().padStart(3, '0')}
             </span>
           </div>
         </div>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={volume}
-          onChange={handleVolumeChange}
-          className="w-full"
-        />
       </div>
     </div>
   );

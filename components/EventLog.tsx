@@ -39,13 +39,11 @@ export default function EventLog({ events, maxEvents = 10 }: EventLogProps) {
   return (
     <div className="te-panel p-5 h-full flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-3">
         <span className="te-label">Event Log</span>
-        <div className="te-display px-2 py-1 rounded">
-          <span className="te-display-text text-xs font-bold">
-            {events.length.toString().padStart(4, '0')}
-          </span>
-        </div>
+        <span className="te-label text-[9px]">
+          {events.length.toString().padStart(4, '0')}
+        </span>
       </div>
 
       {/* Event display - LED style */}

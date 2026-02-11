@@ -123,25 +123,34 @@ export default function Home() {
           </div>
         </header>
 
+        {/* System Bar - Full width */}
+        <div className="mb-4">
+          <AudioControls
+            state={audioState}
+            onStart={handleStart}
+            onStop={handleStop}
+            onVolumeChange={handleVolumeChange}
+          />
+        </div>
+
         {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-          {/* Row 1: Store + Activity (same height) */}
+          {/* Row 1: Store + Activity */}
           <div className="lg:col-span-3">
             <StoreSelector value={store} onChange={handleStoreChange} />
           </div>
           <div className="lg:col-span-4">
             <IntensityMeter intensity={intensity} />
           </div>
-          <div className="lg:col-span-5 lg:row-span-2">
+          <div className="lg:col-span-5">
             <EventLog events={events} maxEvents={10} />
           </div>
 
-          {/* Row 2: Mode + Voices (aligned) */}
+          {/* Row 2: Store Traffic + Voices (same height) */}
           <div className="lg:col-span-3">
-            {/* Mode Selector - Compact */}
-            <div className="te-panel p-4">
+            <div className="te-panel p-4 h-full">
               <div className="flex items-center justify-between mb-3">
-                <span className="te-label">Mode</span>
+                <span className="te-label">Store Traffic</span>
               </div>
               <div className="grid grid-cols-3 gap-1">
                 {(['calm', 'normal', 'busy'] as const).map((level) => (
@@ -159,8 +168,7 @@ export default function Home() {
             </div>
           </div>
           <div className="lg:col-span-4">
-            {/* Sound Guide */}
-            <div className="te-panel p-4">
+            <div className="te-panel p-4 h-full">
               <div className="flex items-center justify-between mb-3">
                 <span className="te-label">Voices</span>
               </div>
@@ -181,16 +189,6 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Row 3: Audio Controls */}
-          <div className="lg:col-span-7">
-            <AudioControls
-              state={audioState}
-              onStart={handleStart}
-              onStop={handleStop}
-              onVolumeChange={handleVolumeChange}
-            />
           </div>
         </div>
 
