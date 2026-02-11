@@ -1,5 +1,7 @@
 'use client';
 
+import { useState, useEffect, useRef } from 'react';
+
 interface IntensityMeterProps {
   intensity: number; // 0 to 1
 }
@@ -7,6 +9,18 @@ interface IntensityMeterProps {
 export default function IntensityMeter({ intensity }: IntensityMeterProps) {
   const segments = 16;
   const filledSegments = Math.round(intensity * segments);
+  const [isPulsing, setIsPulsing] = useState(false);
+  const prevIntensity = useRef(intensity);
+
+  // Pulse animation when intensity increases
+  useEffect(() => {
+    if (intensity > prevIntensity.current) {
+      setIsPulsing(true);
+      const timer = setTimeout(() => setIsPulsing(false), 300);
+      return () => clearTimeout(timer);
+    }
+    prevIntensity.current = intensity;
+  }, [intensity]);
 
   return (
     <div className="te-panel p-4 h-full">
@@ -19,7 +33,7 @@ export default function IntensityMeter({ intensity }: IntensityMeterProps) {
       </div>
 
       {/* LED Display */}
-      <div className="te-display p-3 mb-3">
+      <div className={`te-display p-3 mb-3 transition-all duration-150 ${isPulsing ? 'ring-2 ring-[var(--accent)]/50' : ''}`}>
         <div className="flex items-baseline justify-center gap-1">
           <span className="te-display-text text-3xl font-bold tracking-tight">
             {Math.round(intensity * 100).toString().padStart(3, '0')}
@@ -46,9 +60,7 @@ export default function IntensityMeter({ intensity }: IntensityMeterProps) {
             return (
               <div
                 key={i}
-                className={`flex-1 h-3 rounded-sm transition-all duration-75 ${color} ${
-                  isFilled ? 'meter-bar-active shadow-[0_0_4px_currentColor]' : ''
-                }`}
+                className={`flex-1 h-3 rounded-sm transition-all duration-75 ${color}`}
                 style={{
                   boxShadow: isFilled
                     ? isHigh
@@ -62,6 +74,10 @@ export default function IntensityMeter({ intensity }: IntensityMeterProps) {
             );
           })}
         </div>
+        {/* Activity line - pulses orange on new activity */}
+        <div className={`h-0.5 mt-2 rounded-full transition-all duration-150 ${
+          intensity > 0 ? 'bg-[var(--display-text)]' : 'bg-[#0a0f0d]'
+        } ${isPulsing ? 'bg-[var(--accent)] shadow-[0_0_8px_var(--accent)]' : ''}`} />
       </div>
 
       {/* Scale labels */}

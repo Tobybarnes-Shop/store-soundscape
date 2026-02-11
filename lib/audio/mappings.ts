@@ -37,8 +37,14 @@ export const EVENT_MAPPINGS: EventSoundMapping[] = [
   {
     type: 'search',
     handler: (event, voices) => {
-      // Arpeggio for searches
-      voices.arp.play({ velocity: 0.5 });
+      // Piano chord for searches
+      voices.piano.play({ note: 'C4', duration: '2n', velocity: 0.5 });
+      setTimeout(() => {
+        voices.piano.play({ note: 'E4', duration: '2n', velocity: 0.45 });
+      }, 50);
+      setTimeout(() => {
+        voices.piano.play({ note: 'G4', duration: '2n', velocity: 0.4 });
+      }, 100);
     },
   },
   {
@@ -59,14 +65,8 @@ export const EVENT_MAPPINGS: EventSoundMapping[] = [
       const value = event.data.value || 50;
       const velocity = valueToVelocity(value, 0.5, 0.9);
 
-      // Piano chord
-      voices.piano.play({ note: 'C4', duration: '2n', velocity });
-      setTimeout(() => {
-        voices.piano.play({ note: 'E4', duration: '2n', velocity: velocity * 0.9 });
-      }, 50);
-      setTimeout(() => {
-        voices.piano.play({ note: 'G4', duration: '2n', velocity: velocity * 0.8 });
-      }, 100);
+      // Arpeggio for orders
+      voices.arp.play({ velocity });
 
       // For high-value orders, add choir
       if (value > 100) {

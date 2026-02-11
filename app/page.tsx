@@ -137,17 +137,17 @@ export default function Home() {
           {/* Left Column: Store + Store Traffic stacked */}
           <div className="lg:col-span-3 flex flex-col gap-4 lg:h-[280px]">
             <StoreSelector value={store} onChange={handleStoreChange} />
-            <div className="te-panel p-4 flex-1">
-              <div className="flex items-center justify-between mb-3">
-                <span className="te-label">Store Traffic</span>
-              </div>
-              <div className="grid grid-cols-3 gap-1">
+            <div className="te-panel p-3 flex-1">
+              <span className="te-label text-[8px] block mb-2">Store Traffic</span>
+              <div className="flex gap-1">
                 {(['calm', 'normal', 'busy'] as const).map((level) => (
                   <button
                     key={level}
                     onClick={() => handleIntensityChange(level)}
-                    className={`te-button py-2 text-[8px] ${
-                      intensityLevel === level ? 'te-button-primary' : ''
+                    className={`flex-1 py-1.5 text-[7px] uppercase font-bold rounded transition-colors ${
+                      intensityLevel === level
+                        ? 'bg-[var(--accent)] text-white'
+                        : 'bg-[var(--surface-raised)] text-[var(--foreground)] hover:bg-[var(--border)]'
                     }`}
                   >
                     {level}
