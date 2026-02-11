@@ -9,9 +9,9 @@ export default function IntensityMeter({ intensity }: IntensityMeterProps) {
   const filledSegments = Math.round(intensity * segments);
 
   return (
-    <div className="te-panel p-5">
+    <div className="te-panel p-5 h-full">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-3">
         <span className="te-label">Activity</span>
         <div className="flex items-center gap-2">
           <div className={`te-led ${intensity > 0 ? 'green' : ''}`} />
@@ -19,9 +19,9 @@ export default function IntensityMeter({ intensity }: IntensityMeterProps) {
       </div>
 
       {/* LED Display */}
-      <div className="te-display mb-4">
+      <div className="te-display p-3 mb-3">
         <div className="flex items-baseline justify-center gap-1">
-          <span className="te-display-text text-4xl font-bold tracking-tight">
+          <span className="te-display-text text-3xl font-bold tracking-tight">
             {Math.round(intensity * 100).toString().padStart(3, '0')}
           </span>
           <span className="te-display-text text-sm opacity-70">%</span>
@@ -29,8 +29,8 @@ export default function IntensityMeter({ intensity }: IntensityMeterProps) {
       </div>
 
       {/* Horizontal LED meter bar */}
-      <div className="te-display p-3 mb-3">
-        <div className="flex gap-[3px]">
+      <div className="te-display p-2 mb-2">
+        <div className="flex gap-[2px]">
           {Array.from({ length: segments }).map((_, i) => {
             const isFilled = i < filledSegments;
             const isHigh = i >= segments * 0.75;
@@ -46,7 +46,7 @@ export default function IntensityMeter({ intensity }: IntensityMeterProps) {
             return (
               <div
                 key={i}
-                className={`flex-1 h-4 rounded-sm transition-all duration-75 ${color} ${
+                className={`flex-1 h-3 rounded-sm transition-all duration-75 ${color} ${
                   isFilled ? 'meter-bar-active shadow-[0_0_4px_currentColor]' : ''
                 }`}
                 style={{

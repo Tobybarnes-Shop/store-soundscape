@@ -62,8 +62,8 @@ export default function StoreSelector({ value, onChange }: StoreSelectorProps) {
   };
 
   return (
-    <div className="te-panel p-5">
-      <div className="flex items-center justify-between mb-4">
+    <div className="te-panel p-5 h-full">
+      <div className="flex items-center justify-between mb-3">
         <span className="te-label">Store</span>
         <div className="flex items-center gap-2">
           <div className="te-led green" />
@@ -73,7 +73,7 @@ export default function StoreSelector({ value, onChange }: StoreSelectorProps) {
 
       {/* Display showing current store */}
       <div className="te-display p-3 mb-3">
-        <div className="te-display-text text-xs truncate">
+        <div className="te-display-text text-sm truncate font-bold">
           {value || 'NO STORE'}
         </div>
       </div>
@@ -111,7 +111,7 @@ export default function StoreSelector({ value, onChange }: StoreSelectorProps) {
         )}
       </div>
 
-      <p className="te-label mt-3 text-[8px]">
+      <p className="te-label mt-2 text-[8px]">
         Demo Mode • Simulated Events
       </p>
     </div>

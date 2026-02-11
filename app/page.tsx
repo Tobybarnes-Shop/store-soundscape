@@ -125,21 +125,30 @@ export default function Home() {
 
         {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-          {/* Left Column - Controls */}
-          <div className="lg:col-span-3 space-y-4">
+          {/* Row 1: Store + Activity (same height) */}
+          <div className="lg:col-span-3">
             <StoreSelector value={store} onChange={handleStoreChange} />
+          </div>
+          <div className="lg:col-span-4">
+            <IntensityMeter intensity={intensity} />
+          </div>
+          <div className="lg:col-span-5 lg:row-span-2">
+            <EventLog events={events} maxEvents={10} />
+          </div>
 
-            {/* Mode Selector */}
-            <div className="te-panel p-5">
-              <div className="flex items-center justify-between mb-4">
+          {/* Row 2: Mode + Voices (aligned) */}
+          <div className="lg:col-span-3">
+            {/* Mode Selector - Compact */}
+            <div className="te-panel p-4">
+              <div className="flex items-center justify-between mb-3">
                 <span className="te-label">Mode</span>
               </div>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-1">
                 {(['calm', 'normal', 'busy'] as const).map((level) => (
                   <button
                     key={level}
                     onClick={() => handleIntensityChange(level)}
-                    className={`te-button py-3 text-[9px] ${
+                    className={`te-button py-2 text-[8px] ${
                       intensityLevel === level ? 'te-button-primary' : ''
                     }`}
                   >
@@ -148,36 +157,25 @@ export default function Home() {
                 ))}
               </div>
             </div>
-
-            <AudioControls
-              state={audioState}
-              onStart={handleStart}
-              onStop={handleStop}
-              onVolumeChange={handleVolumeChange}
-            />
           </div>
-
-          {/* Center Column - Meters */}
-          <div className="lg:col-span-4 space-y-4">
-            <IntensityMeter intensity={intensity} />
-
+          <div className="lg:col-span-4">
             {/* Sound Guide */}
-            <div className="te-panel p-5">
-              <div className="flex items-center justify-between mb-4">
+            <div className="te-panel p-4">
+              <div className="flex items-center justify-between mb-3">
                 <span className="te-label">Voices</span>
               </div>
-              <div className="te-display p-3">
-                <div className="space-y-2">
+              <div className="te-display p-2">
+                <div className="grid grid-cols-2 gap-x-4 gap-y-1">
                   {[
-                    { symbol: '○', name: 'PAD', desc: 'Page views', color: 'text-[var(--display-text)]' },
-                    { symbol: '◇', name: 'ARP', desc: 'Searches', color: 'text-cyan-400' },
-                    { symbol: '□', name: 'PERC', desc: 'Add to cart', color: 'text-yellow-400' },
-                    { symbol: '●', name: 'CHOIR', desc: 'Orders', color: 'text-[var(--accent)]' },
+                    { symbol: '○', name: 'PAD', desc: 'Views', color: 'text-[var(--display-text)]' },
+                    { symbol: '◇', name: 'ARP', desc: 'Search', color: 'text-cyan-400' },
+                    { symbol: '□', name: 'PERC', desc: 'Cart', color: 'text-yellow-400' },
+                    { symbol: '●', name: 'CHOIR', desc: 'Order', color: 'text-[var(--accent)]' },
                   ].map(({ symbol, name, desc, color }) => (
-                    <div key={name} className="flex items-center gap-3 text-[10px] font-mono">
-                      <span className={`${color} w-4 text-center`}>{symbol}</span>
-                      <span className="te-display-text w-12 font-bold">{name}</span>
-                      <span className="te-display-text opacity-60">{desc}</span>
+                    <div key={name} className="flex items-center gap-2 text-[9px] font-mono">
+                      <span className={`${color} w-3 text-center`}>{symbol}</span>
+                      <span className="te-display-text font-bold">{name}</span>
+                      <span className="te-display-text opacity-50 text-[8px]">{desc}</span>
                     </div>
                   ))}
                 </div>
@@ -185,9 +183,14 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Right Column - Event Log */}
-          <div className="lg:col-span-5">
-            <EventLog events={events} maxEvents={10} />
+          {/* Row 3: Audio Controls */}
+          <div className="lg:col-span-7">
+            <AudioControls
+              state={audioState}
+              onStart={handleStart}
+              onStop={handleStop}
+              onVolumeChange={handleVolumeChange}
+            />
           </div>
         </div>
 
