@@ -4,6 +4,7 @@ export interface Voice {
   name: string;
   play: (options?: { note?: string; duration?: string; velocity?: number; value?: number }) => void;
   dispose: () => void;
+  setVolume: (volume: number) => void;
 }
 
 // Piano voice for ambient baseline and orders
@@ -29,6 +30,9 @@ export function createPianoVoice(): Voice {
     dispose: () => {
       synth.dispose();
       reverb.dispose();
+    },
+    setVolume: (volume: number) => {
+      synth.volume.value = volume * 30 - 30; // -30 to 0 dB
     },
   };
 }
@@ -59,6 +63,9 @@ export function createPadVoice(): Voice {
       filter.dispose();
       reverb.dispose();
     },
+    setVolume: (volume: number) => {
+      synth.volume.value = volume * 30 - 30;
+    },
   };
 }
 
@@ -87,6 +94,9 @@ export function createPercussionVoice(): Voice {
     dispose: () => {
       metalSynth.dispose();
       reverb.dispose();
+    },
+    setVolume: (volume: number) => {
+      metalSynth.volume.value = volume * 30 - 30;
     },
   };
 }
@@ -122,6 +132,9 @@ export function createArpVoice(): Voice {
       delay.dispose();
       reverb.dispose();
     },
+    setVolume: (volume: number) => {
+      synth.volume.value = volume * 30 - 30;
+    },
   };
 }
 
@@ -156,6 +169,47 @@ export function createChoirVoice(): Voice {
       chorus.dispose();
       reverb.dispose();
     },
+    setVolume: (volume: number) => {
+      synth.volume.value = volume * 30 - 30;
+    },
+  };
+}
+
+// Alert voice for errors - attention-grabbing dissonant sound
+export function createAlertVoice(): Voice {
+  const reverb = new Tone.Reverb({ decay: 1, wet: 0.2 }).toDestination();
+  const synth = new Tone.PolySynth(Tone.Synth, {
+    oscillator: { type: 'sawtooth' },
+    envelope: {
+      attack: 0.01,
+      decay: 0.2,
+      sustain: 0.3,
+      release: 0.5,
+    },
+  }).connect(reverb);
+
+  synth.volume.value = -6;
+
+  return {
+    name: 'alert',
+    play: ({ velocity = 0.7 } = {}) => {
+      const now = Tone.now();
+      // Dissonant interval - minor second
+      synth.triggerAttackRelease('E4', '8n', now, velocity);
+      synth.triggerAttackRelease('F4', '8n', now, velocity * 0.9);
+      // Second hit
+      setTimeout(() => {
+        synth.triggerAttackRelease('E4', '8n', Tone.now(), velocity * 0.8);
+        synth.triggerAttackRelease('F4', '8n', Tone.now(), velocity * 0.7);
+      }, 200);
+    },
+    dispose: () => {
+      synth.dispose();
+      reverb.dispose();
+    },
+    setVolume: (volume: number) => {
+      synth.volume.value = volume * 30 - 30;
+    },
   };
 }
 
@@ -165,6 +219,7 @@ export interface Voices {
   percussion: Voice;
   arp: Voice;
   choir: Voice;
+  alert: Voice;
 }
 
 export function createAllVoices(): Voices {
@@ -174,6 +229,7 @@ export function createAllVoices(): Voices {
     percussion: createPercussionVoice(),
     arp: createArpVoice(),
     choir: createChoirVoice(),
+    alert: createAlertVoice(),
   };
 }
 

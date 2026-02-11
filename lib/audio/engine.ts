@@ -107,6 +107,18 @@ export class AudioEngine {
     const db = volume * 60 - 60;
     Tone.getDestination().volume.value = db;
   }
+
+  setVoiceVolume(voiceName: string, volume: number): void {
+    if (!this.voices) return;
+    const voice = this.voices[voiceName as keyof Voices];
+    if (voice && 'setVolume' in voice) {
+      (voice as { setVolume: (v: number) => void }).setVolume(volume);
+    }
+  }
+
+  getVoices(): Voices | null {
+    return this.voices;
+  }
 }
 
 // Singleton instance for use across the app

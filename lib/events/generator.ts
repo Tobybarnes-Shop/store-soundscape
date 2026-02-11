@@ -26,6 +26,14 @@ const SAMPLE_PRODUCTS = [
   'prod_005',
 ];
 
+const SAMPLE_ERRORS = [
+  { code: 404, message: 'Product not found' },
+  { code: 500, message: 'Server timeout' },
+  { code: 503, message: 'Service unavailable' },
+  { code: 408, message: 'Request timeout' },
+  { code: 429, message: 'Rate limit exceeded' },
+];
+
 function generateId(): string {
   return Math.random().toString(36).substring(2, 11);
 }
@@ -87,6 +95,15 @@ export function generateEvent(config: EventConfig = DEFAULT_EVENT_CONFIG): Store
           query: randomElement(SAMPLE_SEARCHES),
         },
       };
+    case 'connection_error':
+      const error = randomElement(SAMPLE_ERRORS);
+      return {
+        ...baseEvent,
+        data: {
+          errorCode: error.code,
+          errorMessage: error.message,
+        },
+      };
     default:
       return baseEvent;
   }
@@ -95,6 +112,7 @@ export function generateEvent(config: EventConfig = DEFAULT_EVENT_CONFIG): Store
 export class EventGenerator {
   private config: EventConfig;
   private intervalId: ReturnType<typeof setTimeout> | null = null;
+  private errorIntervalId: ReturnType<typeof setTimeout> | null = null;
   private listeners: Set<(event: StoreEvent) => void> = new Set();
 
   constructor(config: EventConfig = DEFAULT_EVENT_CONFIG) {
@@ -122,15 +140,37 @@ export class EventGenerator {
     }, delay);
   }
 
+  private scheduleNextError(): void {
+    // Random interval between 4-6 minutes (240000-360000ms)
+    const delay = 240000 + Math.random() * 120000;
+
+    this.errorIntervalId = setTimeout(() => {
+      const errorEvent = generateEvent({
+        ...this.config,
+        weights: { ...this.config.weights, connection_error: 1, page_view: 0, search: 0, add_to_cart: 0, order_placed: 0 },
+      });
+      errorEvent.type = 'connection_error';
+      const error = SAMPLE_ERRORS[Math.floor(Math.random() * SAMPLE_ERRORS.length)];
+      errorEvent.data = { errorCode: error.code, errorMessage: error.message };
+      this.emit(errorEvent);
+      this.scheduleNextError();
+    }, delay);
+  }
+
   start(): void {
     if (this.intervalId) return;
     this.scheduleNext();
+    this.scheduleNextError();
   }
 
   stop(): void {
     if (this.intervalId) {
       clearTimeout(this.intervalId);
       this.intervalId = null;
+    }
+    if (this.errorIntervalId) {
+      clearTimeout(this.errorIntervalId);
+      this.errorIntervalId = null;
     }
   }
 

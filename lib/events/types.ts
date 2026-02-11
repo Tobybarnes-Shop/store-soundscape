@@ -2,7 +2,8 @@ export type StoreEventType =
   | 'order_placed'
   | 'add_to_cart'
   | 'page_view'
-  | 'search';
+  | 'search'
+  | 'connection_error';
 
 export interface StoreEvent {
   id: string;
@@ -13,6 +14,8 @@ export interface StoreEvent {
     query?: string;      // Search query
     page?: string;       // Page URL
     productId?: string;  // Product ID
+    errorCode?: number;  // Error code (404, 500, etc.)
+    errorMessage?: string; // Error description
   };
 }
 
@@ -30,5 +33,6 @@ export const DEFAULT_EVENT_CONFIG: EventConfig = {
     search: 20,
     add_to_cart: 20,
     order_placed: 10,
+    connection_error: 0, // Handled separately by EventGenerator
   },
 };

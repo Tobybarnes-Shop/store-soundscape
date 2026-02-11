@@ -76,6 +76,13 @@ export const EVENT_MAPPINGS: EventSoundMapping[] = [
       }
     },
   },
+  {
+    type: 'connection_error',
+    handler: (event, voices) => {
+      // Alert sound for errors
+      voices.alert.play({ velocity: 0.8 });
+    },
+  },
 ];
 
 export function playEventSound(event: StoreEvent, voices: Voices): void {
@@ -95,6 +102,8 @@ export function getEventDescription(event: StoreEvent): string {
       return `Added to cart: $${event.data.value || 0}`;
     case 'order_placed':
       return `Order placed: $${event.data.value || 0}`;
+    case 'connection_error':
+      return `ERROR ${event.data.errorCode}: ${event.data.errorMessage}`;
     default:
       return `Unknown event: ${event.type}`;
   }

@@ -18,6 +18,8 @@ function getEventSymbol(type: string): string {
       return '□';
     case 'order_placed':
       return '●';
+    case 'connection_error':
+      return '⚠';
     default:
       return '·';
   }
@@ -80,18 +82,19 @@ export default function EventLog({ events, maxEvents = 10 }: EventLogProps) {
       </div>
 
       {/* Stats row */}
-      <div className="mt-4 grid grid-cols-4 gap-2">
+      <div className="mt-4 grid grid-cols-5 gap-1">
         {[
-          { type: 'page_view', symbol: '○', label: 'VIEW' },
-          { type: 'search', symbol: '◇', label: 'SRCH' },
-          { type: 'add_to_cart', symbol: '□', label: 'CART' },
-          { type: 'order_placed', symbol: '●', label: 'ORDR' },
-        ].map(({ type, symbol, label }) => {
+          { type: 'page_view', symbol: '○', label: 'VIEW', color: 'text-[var(--accent)]' },
+          { type: 'search', symbol: '◇', label: 'SRCH', color: 'text-[var(--accent)]' },
+          { type: 'add_to_cart', symbol: '□', label: 'CART', color: 'text-[var(--accent)]' },
+          { type: 'order_placed', symbol: '●', label: 'ORDR', color: 'text-[var(--accent)]' },
+          { type: 'connection_error', symbol: '⚠', label: 'ERR', color: 'text-red-500' },
+        ].map(({ type, symbol, label, color }) => {
           const count = events.filter((e) => e.type === type).length;
           return (
             <div key={type} className="text-center">
               <div className="te-button py-2 px-1 mb-1">
-                <span className="text-[var(--accent)] text-sm">{symbol}</span>
+                <span className={`${color} text-sm`}>{symbol}</span>
               </div>
               <div className="te-label text-[7px]">{label}</div>
               <div className="text-[10px] font-bold text-[var(--foreground)]">
