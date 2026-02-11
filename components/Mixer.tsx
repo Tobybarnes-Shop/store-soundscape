@@ -76,26 +76,26 @@ export default function Mixer({ engine }: MixerProps) {
   }, [applyVolume, volumes, muted]);
 
   return (
-    <div className="te-panel p-3 h-full flex flex-col">
-      <div className="flex items-center justify-between mb-2">
+    <div className="te-panel p-3 h-full overflow-hidden flex flex-col">
+      <div className="flex items-center justify-between mb-2 flex-shrink-0">
         <span className="te-label">Mixer</span>
       </div>
 
-      <div className="grid grid-cols-6 gap-1 flex-1">
-        {VOICE_CONFIG.map(({ key, name, desc, symbol, color }) => {
+      <div className="grid grid-cols-6 gap-1 flex-1 min-h-0">
+        {VOICE_CONFIG.map(({ key, name, symbol, color }) => {
           const isMuted = muted[key];
           const isSoloed = soloed === key;
           const isOtherSoloed = soloed && soloed !== key;
 
           return (
-            <div key={key} className="flex flex-col">
+            <div key={key} className="flex flex-col min-h-0">
               {/* Channel strip */}
-              <div className={`te-display p-1.5 w-full flex-1 flex flex-col items-center justify-between ${isOtherSoloed ? 'opacity-40' : ''}`}>
+              <div className={`te-display p-1.5 w-full flex-1 flex flex-col items-center min-h-0 ${isOtherSoloed ? 'opacity-40' : ''}`}>
                 {/* Symbol */}
-                <span className="text-sm">{symbol}</span>
+                <span className="text-sm flex-shrink-0">{symbol}</span>
 
-                {/* Vertical slider - fills available space */}
-                <div className="flex-1 flex items-center justify-center py-1">
+                {/* Vertical slider */}
+                <div className="flex-1 flex items-center justify-center py-1 min-h-0">
                   <input
                     type="range"
                     min="0"
@@ -107,15 +107,14 @@ export default function Mixer({ engine }: MixerProps) {
                     style={{
                       writingMode: 'vertical-lr',
                       direction: 'rtl',
-                      height: '100%',
-                      minHeight: '60px',
+                      height: '80px',
                       width: '16px',
                     }}
                   />
                 </div>
 
                 {/* Level indicator */}
-                <div className="w-full h-1 rounded-full bg-[var(--display-bg)] overflow-hidden">
+                <div className="w-full h-1 rounded-full bg-[var(--display-bg)] overflow-hidden flex-shrink-0">
                   <div
                     className={`h-full ${color} transition-all duration-100`}
                     style={{ width: `${(isMuted || isOtherSoloed) ? 0 : volumes[key] * 100}%` }}
@@ -123,7 +122,7 @@ export default function Mixer({ engine }: MixerProps) {
                 </div>
 
                 {/* Mute/Solo buttons */}
-                <div className="flex gap-0.5 mt-1">
+                <div className="flex gap-0.5 mt-1 flex-shrink-0">
                   <button
                     onClick={() => handleMute(key)}
                     className={`px-1.5 py-0.5 text-[7px] font-bold rounded ${
@@ -144,7 +143,7 @@ export default function Mixer({ engine }: MixerProps) {
               </div>
 
               {/* Label */}
-              <span className="te-label text-[7px] mt-0.5 text-center">{name}</span>
+              <span className="te-label text-[7px] mt-0.5 text-center flex-shrink-0">{name}</span>
             </div>
           );
         })}

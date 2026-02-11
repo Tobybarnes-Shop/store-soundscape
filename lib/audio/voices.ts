@@ -64,7 +64,7 @@ export function createPadVoice(): Voice {
       reverb.dispose();
     },
     setVolume: (volume: number) => {
-      synth.volume.value = volume * 30 - 30;
+      synth.volume.value = volume === 0 ? -Infinity : volume * 40 - 40;
     },
   };
 }
@@ -96,7 +96,7 @@ export function createPercussionVoice(): Voice {
       reverb.dispose();
     },
     setVolume: (volume: number) => {
-      metalSynth.volume.value = volume * 30 - 30;
+      metalSynth.volume.value = volume === 0 ? -Infinity : volume * 40 - 40;
     },
   };
 }
@@ -133,7 +133,7 @@ export function createArpVoice(): Voice {
       reverb.dispose();
     },
     setVolume: (volume: number) => {
-      synth.volume.value = volume * 30 - 30;
+      synth.volume.value = volume === 0 ? -Infinity : volume * 40 - 40;
     },
   };
 }
@@ -170,7 +170,7 @@ export function createChoirVoice(): Voice {
       reverb.dispose();
     },
     setVolume: (volume: number) => {
-      synth.volume.value = volume * 30 - 30;
+      synth.volume.value = volume === 0 ? -Infinity : volume * 40 - 40;
     },
   };
 }
@@ -208,7 +208,7 @@ export function createAlertVoice(): Voice {
       reverb.dispose();
     },
     setVolume: (volume: number) => {
-      synth.volume.value = volume * 30 - 30;
+      synth.volume.value = volume === 0 ? -Infinity : volume * 40 - 40;
     },
   };
 }
