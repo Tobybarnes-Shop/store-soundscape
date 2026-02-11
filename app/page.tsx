@@ -1,65 +1,166 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect, useCallback, useRef } from 'react';
+import AudioControls from '@/components/AudioControls';
+import IntensityMeter from '@/components/IntensityMeter';
+import EventLog from '@/components/EventLog';
+import StoreSelector from '@/components/StoreSelector';
+import { AudioEngine, AudioEngineState, getAudioEngine } from '@/lib/audio/engine';
+import { EventGenerator } from '@/lib/events/generator';
+import { StoreEvent } from '@/lib/events/types';
 
 export default function Home() {
+  const [audioState, setAudioState] = useState<AudioEngineState>('stopped');
+  const [intensity, setIntensity] = useState(0);
+  const [events, setEvents] = useState<StoreEvent[]>([]);
+  const [intensityLevel, setIntensityLevel] = useState<'calm' | 'normal' | 'busy'>('normal');
+  const [store, setStore] = useState('allbirds.myshopify.com');
+
+  const engineRef = useRef<AudioEngine | null>(null);
+  const generatorRef = useRef<EventGenerator | null>(null);
+
+  useEffect(() => {
+    engineRef.current = getAudioEngine({
+      onStateChange: setAudioState,
+      onIntensityChange: setIntensity,
+    });
+    generatorRef.current = new EventGenerator();
+
+    return () => {
+      engineRef.current?.stop();
+      generatorRef.current?.stop();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!generatorRef.current || !engineRef.current) return;
+
+    const unsubscribe = generatorRef.current.subscribe((event) => {
+      setEvents((prev) => [...prev, event]);
+      engineRef.current?.playEvent(event);
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const handleStart = useCallback(async () => {
+    if (!engineRef.current || !generatorRef.current) return;
+    try {
+      await engineRef.current.start();
+      generatorRef.current.start();
+    } catch (error) {
+      console.error('Failed to start:', error);
+    }
+  }, []);
+
+  const handleStop = useCallback(() => {
+    engineRef.current?.stop();
+    generatorRef.current?.stop();
+  }, []);
+
+  const handleVolumeChange = useCallback((volume: number) => {
+    engineRef.current?.setVolume(volume);
+  }, []);
+
+  const handleIntensityChange = useCallback((level: 'calm' | 'normal' | 'busy') => {
+    setIntensityLevel(level);
+    generatorRef.current?.setIntensity(level);
+  }, []);
+
+  const handleStoreChange = useCallback((newStore: string) => {
+    setStore(newStore);
+    setEvents([]);
+  }, []);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="min-h-screen bg-[var(--background)] p-4 md:p-8">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <header className="mb-8">
+          <div className="flex items-center gap-4 mb-2">
+            <div className="w-2 h-2 bg-[var(--accent)]" />
+            <h1 className="text-sm font-mono uppercase tracking-[0.2em] text-[var(--foreground)]">
+              Store Soundscape
+            </h1>
+          </div>
+          <p className="text-xs font-mono text-[var(--muted)] ml-6">
+            Generative audio from commerce events
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+        </header>
+
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          {/* Left Column - Controls */}
+          <div className="lg:col-span-3 space-y-4">
+            <StoreSelector value={store} onChange={handleStoreChange} />
+            <AudioControls
+              state={audioState}
+              onStart={handleStart}
+              onStop={handleStop}
+              onVolumeChange={handleVolumeChange}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+            {/* Mode Selector */}
+            <div className="te-panel p-6">
+              <div className="flex items-center justify-between mb-4">
+                <span className="te-label">Mode</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {(['calm', 'normal', 'busy'] as const).map((level) => (
+                  <button
+                    key={level}
+                    onClick={() => handleIntensityChange(level)}
+                    className={`te-button py-3 ${
+                      intensityLevel === level ? 'te-button-primary' : ''
+                    }`}
+                  >
+                    {level}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Center Column - Meters */}
+          <div className="lg:col-span-4 space-y-4">
+            <IntensityMeter intensity={intensity} />
+
+            {/* Sound Guide */}
+            <div className="te-panel p-6">
+              <div className="flex items-center justify-between mb-4">
+                <span className="te-label">Voices</span>
+              </div>
+              <div className="space-y-3">
+                {[
+                  { symbol: '○', name: 'Pad', desc: 'Page views' },
+                  { symbol: '◇', name: 'Arp', desc: 'Searches' },
+                  { symbol: '□', name: 'Perc', desc: 'Add to cart' },
+                  { symbol: '●', name: 'Choir', desc: 'Orders' },
+                ].map(({ symbol, name, desc }) => (
+                  <div key={name} className="flex items-center gap-4 text-xs font-mono">
+                    <span className="text-[var(--accent)] w-4">{symbol}</span>
+                    <span className="text-[var(--foreground)] w-12">{name}</span>
+                    <span className="text-[var(--muted)]">{desc}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column - Event Log */}
+          <div className="lg:col-span-5">
+            <EventLog events={events} maxEvents={12} />
+          </div>
         </div>
-      </main>
+
+        {/* Footer */}
+        <footer className="mt-8 pt-4 border-t border-[var(--border)]">
+          <div className="flex items-center justify-between text-xs font-mono text-[var(--muted)]">
+            <span>Next.js + Tone.js</span>
+            <span>v1.0.0</span>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }

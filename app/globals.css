@@ -1,8 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #1a1a1a;
+  --foreground: #fafafa;
+  --accent: #ff6b00;
+  --accent-dim: #cc5500;
+  --surface: #242424;
+  --surface-raised: #2a2a2a;
+  --border: #333333;
+  --muted: #666666;
 }
 
 @theme inline {
@@ -12,15 +18,143 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Dieter Rams / TE inspired components */
+.te-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+}
+
+.te-button {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.1s ease;
+}
+
+.te-button:hover {
+  background: var(--border);
+}
+
+.te-button:active {
+  transform: scale(0.98);
+}
+
+.te-button-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #000;
+}
+
+.te-button-primary:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent-dim);
+}
+
+/* LED indicator */
+.te-led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--muted);
+  box-shadow: none;
+  transition: all 0.2s ease;
+}
+
+.te-led.active {
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent), 0 0 16px var(--accent);
+}
+
+/* Custom animation for new events */
+@keyframes pulse-once {
+  0% {
+    background-color: rgba(255, 107, 0, 0.2);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.animate-pulse-once {
+  animation: pulse-once 0.4s ease-out;
+}
+
+/* Scrollbar - minimal */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 0;
+}
+
+/* Range input - hardware style */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  height: 24px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 24px;
+  background: var(--foreground);
+  border-radius: 1px;
+  cursor: pointer;
+  margin-top: -10px;
+  border: none;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  background: var(--border);
+  border-radius: 0;
+}
+
+/* Meter bars */
+@keyframes meter-pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+.meter-bar-active {
+  animation: meter-pulse 0.3s ease infinite;
+}
+
+/* Typography */
+.te-label {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.te-value {
+  font-size: 24px;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
 }
