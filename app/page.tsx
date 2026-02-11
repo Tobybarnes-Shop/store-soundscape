@@ -5,6 +5,7 @@ import AudioControls from '@/components/AudioControls';
 import IntensityMeter from '@/components/IntensityMeter';
 import EventLog from '@/components/EventLog';
 import StoreSelector from '@/components/StoreSelector';
+import ThemeToggle from '@/components/ThemeToggle';
 import { AudioEngine, AudioEngineState, getAudioEngine } from '@/lib/audio/engine';
 import { EventGenerator } from '@/lib/events/generator';
 import { StoreEvent } from '@/lib/events/types';
@@ -15,9 +16,19 @@ export default function Home() {
   const [events, setEvents] = useState<StoreEvent[]>([]);
   const [intensityLevel, setIntensityLevel] = useState<'calm' | 'normal' | 'busy'>('normal');
   const [store, setStore] = useState('allbirds.myshopify.com');
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
   const engineRef = useRef<AudioEngine | null>(null);
   const generatorRef = useRef<EventGenerator | null>(null);
+
+  useEffect(() => {
+    // Check for saved theme preference or system preference
+    const savedTheme = localStorage.getItem('theme') as 'dark' | 'light' | null;
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+    setTheme(initialTheme);
+    document.documentElement.setAttribute('data-theme', initialTheme);
+  }, []);
 
   useEffect(() => {
     engineRef.current = getAudioEngine({
@@ -42,6 +53,13 @@ export default function Home() {
 
     return unsubscribe;
   }, []);
+
+  const handleThemeToggle = useCallback(() => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+  }, [theme]);
 
   const handleStart = useCallback(async () => {
     if (!engineRef.current || !generatorRef.current) return;
@@ -77,13 +95,16 @@ export default function Home() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <header className="mb-8">
-          <div className="flex items-center gap-4 mb-2">
-            <div className="w-2 h-2 bg-[var(--accent)]" />
-            <h1 className="text-sm font-mono uppercase tracking-[0.2em] text-[var(--foreground)]">
-              Store Soundscape
-            </h1>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-2 h-2 bg-[var(--accent)]" />
+              <h1 className="text-sm font-mono uppercase tracking-[0.2em] text-[var(--foreground)]">
+                Store Soundscape
+              </h1>
+            </div>
+            <ThemeToggle theme={theme} onToggle={handleThemeToggle} />
           </div>
-          <p className="text-xs font-mono text-[var(--muted)] ml-6">
+          <p className="text-xs font-mono text-[var(--muted)] ml-6 mt-2">
             Generative audio from commerce events
           </p>
         </header>

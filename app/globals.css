@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
-:root {
+/* Dark theme (default) */
+:root,
+[data-theme="dark"] {
   --background: #1a1a1a;
   --foreground: #fafafa;
   --accent: #ff6b00;
@@ -9,6 +11,18 @@
   --surface-raised: #2a2a2a;
   --border: #333333;
   --muted: #666666;
+}
+
+/* Light theme */
+[data-theme="light"] {
+  --background: #f5f5f5;
+  --foreground: #1a1a1a;
+  --accent: #ff6b00;
+  --accent-dim: #cc5500;
+  --surface: #ffffff;
+  --surface-raised: #fafafa;
+  --border: #e0e0e0;
+  --muted: #888888;
 }
 
 @theme inline {
@@ -23,6 +37,7 @@ body {
   color: var(--foreground);
   font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Dieter Rams / TE inspired components */
@@ -30,6 +45,7 @@ body {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 2px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .te-button {
@@ -42,6 +58,7 @@ body {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   transition: all 0.1s ease;
+  color: var(--foreground);
 }
 
 .te-button:hover {
@@ -157,4 +174,13 @@ input[type="range"]::-webkit-slider-runnable-track {
   font-weight: 300;
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
+}
+
+/* Text input */
+input[type="text"] {
+  color: var(--foreground);
+}
+
+input[type="text"]::placeholder {
+  color: var(--muted);
 }
