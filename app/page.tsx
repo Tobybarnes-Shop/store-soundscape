@@ -188,7 +188,7 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-4">
               <span className="te-label text-[8px]">Next.js + Tone.js</span>
-              <span className="te-label text-[8px]">v1.0.0</span>
+              <span className="te-label text-[8px]">v1.0.17</span>
             </div>
           </div>
         </footer>
