@@ -17,17 +17,23 @@ export default function Home() {
   const [intensityLevel, setIntensityLevel] = useState<'calm' | 'normal' | 'busy'>('normal');
   const [store, setStore] = useState('allbirds.myshopify.com');
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [mounted, setMounted] = useState(false);
 
   const engineRef = useRef<AudioEngine | null>(null);
   const generatorRef = useRef<EventGenerator | null>(null);
 
   useEffect(() => {
+    setMounted(true);
     // Check for saved theme preference or system preference
-    const savedTheme = localStorage.getItem('theme') as 'dark' | 'light' | null;
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
-    setTheme(initialTheme);
-    document.documentElement.setAttribute('data-theme', initialTheme);
+    try {
+      const savedTheme = localStorage.getItem('theme') as 'dark' | 'light' | null;
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+      setTheme(initialTheme);
+      document.documentElement.setAttribute('data-theme', initialTheme);
+    } catch {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
   }, []);
 
   useEffect(() => {
