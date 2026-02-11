@@ -8,12 +8,12 @@ interface MixerProps {
 }
 
 const VOICE_CONFIG = [
-  { key: 'pad', name: 'PAD', desc: 'Views', symbol: '○', color: 'bg-emerald-500' },
-  { key: 'piano', name: 'KEYS', desc: 'Search', symbol: '◇', color: 'bg-cyan-500' },
-  { key: 'percussion', name: 'PERC', desc: 'Cart', symbol: '□', color: 'bg-yellow-500' },
-  { key: 'arp', name: 'ARP', desc: 'Order', symbol: '●', color: 'bg-orange-500' },
-  { key: 'choir', name: 'CHOIR', desc: 'High $', symbol: '◆', color: 'bg-purple-500' },
-  { key: 'alert', name: 'ALERT', desc: 'Error', symbol: '⚠', color: 'bg-red-500' },
+  { key: 'pad', name: 'VIEW', desc: 'Pad', symbol: '○', color: 'bg-emerald-500' },
+  { key: 'piano', name: 'SEARCH', desc: 'Keys', symbol: '◇', color: 'bg-cyan-500' },
+  { key: 'percussion', name: 'CART', desc: 'Perc', symbol: '□', color: 'bg-yellow-500' },
+  { key: 'arp', name: 'ORDER', desc: 'Arp', symbol: '●', color: 'bg-orange-500' },
+  { key: 'choir', name: 'HIGH $', desc: 'Choir', symbol: '◆', color: 'bg-purple-500' },
+  { key: 'alert', name: 'ERROR', desc: 'Alert', symbol: '⚠', color: 'bg-red-500' },
 ];
 
 export default function Mixer({ engine }: MixerProps) {
