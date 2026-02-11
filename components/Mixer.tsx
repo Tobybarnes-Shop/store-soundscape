@@ -78,8 +78,15 @@ export default function Mixer({ engine }: MixerProps) {
                     min="0"
                     max="1"
                     step="0.01"
-                    value={volumes[key]}
-                    onChange={(e) => handleVolumeChange(key, parseFloat(e.target.value))}
+                    value={isMuted ? 0 : volumes[key]}
+                    onChange={(e) => {
+                      const val = parseFloat(e.target.value);
+                      // If muted and user moves slider, unmute
+                      if (isMuted && val > 0) {
+                        setMuted((prev) => ({ ...prev, [key]: false }));
+                      }
+                      handleVolumeChange(key, val);
+                    }}
                     className="mixer-slider"
                     style={{
                       writingMode: 'vertical-lr',
