@@ -120,12 +120,6 @@ export default function Home() {
           {/* Left Column - Controls */}
           <div className="lg:col-span-3 space-y-4">
             <StoreSelector value={store} onChange={handleStoreChange} />
-            <AudioControls
-              state={audioState}
-              onStart={handleStart}
-              onStop={handleStop}
-              onVolumeChange={handleVolumeChange}
-            />
 
             {/* Mode Selector */}
             <div className="te-panel p-6">
@@ -146,6 +140,13 @@ export default function Home() {
                 ))}
               </div>
             </div>
+
+            <AudioControls
+              state={audioState}
+              onStart={handleStart}
+              onStop={handleStop}
+              onVolumeChange={handleVolumeChange}
+            />
           </div>
 
           {/* Center Column - Meters */}
