@@ -57,16 +57,16 @@ export default function EventLog({ events, maxEvents = 10 }: EventLogProps) {
             </span>
           </div>
         ) : (
-          <div className="space-y-1 overflow-y-auto h-full font-mono text-[11px]">
+          <div className="overflow-y-auto h-full font-mono text-[11px]">
             {displayEvents.map((event, index) => (
               <div
                 key={event.id}
-                className={`flex items-center gap-2 py-1.5 px-2 rounded transition-all duration-200 ${
-                  index === 0 ? 'bg-[var(--accent-green)]/20 animate-pulse-once' : ''
+                className={`flex items-center gap-2 h-7 px-2 rounded ${
+                  index === 0 ? 'bg-[var(--accent-green)]/20' : ''
                 }`}
-                style={{ opacity: 1 - index * 0.07 }}
+                style={{ opacity: 1 - index * 0.06 }}
               >
-                <span className="te-display-text w-4 text-center">
+                <span className="te-display-text w-4 text-center flex-shrink-0">
                   {getEventSymbol(event.type)}
                 </span>
                 <span className="te-display-text opacity-60 w-14 flex-shrink-0 text-[10px]">
