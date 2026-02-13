@@ -336,6 +336,37 @@ body {
   animation: pulse-once 0.4s ease-out;
 }
 
+/* Slide animations for video panel */
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutToRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+.slide-in-right {
+  animation: slideInFromRight 0.4s ease-out forwards;
+}
+
+.slide-out-right {
+  animation: slideOutToRight 0.4s ease-in forwards;
+}
+
 /* Scrollbar - minimal */
 .overflow-y-auto::-webkit-scrollbar {
   width: 4px;

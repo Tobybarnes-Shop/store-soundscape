@@ -211,13 +211,17 @@ export default function Home() {
         {/* Event Log and Video Section */}
         <div className="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
           {/* Event Log */}
-          <div className={themeVariant === 'default' ? 'lg:col-span-8' : 'lg:col-span-12'}>
+          <div
+            className={`transition-all duration-700 ease-in-out ${
+              themeVariant === 'default' ? 'lg:col-span-8' : 'lg:col-span-12'
+            }`}
+          >
             <EventLog events={events} maxEvents={8} />
           </div>
 
           {/* Video Section - Only for Default theme */}
           {themeVariant === 'default' && (
-            <div className="lg:col-span-4">
+            <div className="lg:col-span-4 slide-in-right">
               <VideoPlayer
                 src="/videos/mac-demarco-garbage-funk.mp4"
                 title="Mac DeMarco - Garbage Funk"
