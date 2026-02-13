@@ -7,6 +7,7 @@ import EventLog from '@/components/EventLog';
 import StoreSelector from '@/components/StoreSelector';
 import ColorModeSwitch from '@/components/ColorModeSwitch';
 import Mixer from '@/components/Mixer';
+import VideoPlayer from '@/components/VideoPlayer';
 import { AudioEngine, AudioEngineState, getAudioEngine } from '@/lib/audio/engine';
 import { EventGenerator } from '@/lib/events/generator';
 import { StoreEvent } from '@/lib/events/types';
@@ -212,6 +213,16 @@ export default function Home() {
           <EventLog events={events} maxEvents={8} />
         </div>
 
+        {/* Video Section - Only for Default theme */}
+        {themeVariant === 'default' && (
+          <div className="mt-4">
+            <VideoPlayer
+              src="/videos/mac-demarco-garbage-funk.mp4"
+              title="Mac DeMarco - Garbage Funk"
+            />
+          </div>
+        )}
+
         {/* Footer - Bottom panel with ports */}
         <footer className="te-panel p-3 mt-4">
           <div className="flex items-center justify-between">
@@ -227,7 +238,7 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-4">
               <span className="te-label text-[8px]">Next.js + Tone.js</span>
-              <span className="te-label text-[8px]">v3.0</span>
+              <span className="te-label text-[8px]">v4.0</span>
             </div>
           </div>
         </footer>

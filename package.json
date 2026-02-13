@@ -1,13 +1,18 @@
 {
   "name": "app",
-  "version": "0.1.0",
+  "version": "4.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "screenshot": "node scripts/take-screenshots.mjs"
+    "screenshot": "node scripts/take-screenshots.mjs",
+    "screenshot:history": "node scripts/screenshot-history.mjs",
+    "screenshot:prod": "node scripts/screenshot-production.mjs",
+    "screenshot:auto": "node scripts/screenshot-auto.mjs",
+    "release:screenshot": "npm run build && node scripts/screenshot-auto.mjs"
+
   },
   "dependencies": {
     "next": "16.1.6",
