@@ -216,7 +216,7 @@ export default function Home() {
               themeVariant === 'default' ? 'lg:col-span-8' : 'lg:col-span-12'
             }`}
             style={{
-              minHeight: '360px',
+              minHeight: '300px',
               transitionTimingFunction: 'cubic-bezier(0.4, 0.0, 0.2, 1)'
             }}
           >
