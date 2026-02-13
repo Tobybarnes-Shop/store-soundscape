@@ -225,10 +225,12 @@ export default function Home() {
           {/* Video Section - Only for Default theme */}
           {themeVariant === 'default' && (
             <div
-              className="slide-in-right"
               style={{
                 width: '100%',
                 maxWidth: '33.33%',
+                opacity: 1,
+                transform: 'translateX(0)',
+                transition: 'opacity 1000ms cubic-bezier(0.4, 0.0, 0.2, 1), transform 1000ms cubic-bezier(0.4, 0.0, 0.2, 1)',
               }}
             >
               <VideoPlayer
