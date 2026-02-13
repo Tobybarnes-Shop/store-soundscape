@@ -80,7 +80,7 @@ export default function EventLog({ events, maxEvents = 10 }: EventLogProps) {
               </span>
             </div>
           ) : (
-            <div className="overflow-y-auto max-h-24 font-mono text-[11px]">
+            <div className="overflow-y-auto font-mono text-[11px]" style={{ maxHeight: '240px' }}>
               {displayEvents.map((event, index) => (
                 <div
                   key={event.id}
