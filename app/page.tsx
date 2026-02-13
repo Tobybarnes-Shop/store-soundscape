@@ -210,12 +210,8 @@ export default function Home() {
 
         {/* Event Log and Video Section */}
         <div className="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
-          {/* Event Log */}
-          <div
-            className={`transition-all duration-700 ease-in-out ${
-              themeVariant === 'default' ? 'lg:col-span-8' : 'lg:col-span-12'
-            }`}
-          >
+          {/* Event Log - Always 8 columns */}
+          <div className="lg:col-span-8">
             <EventLog events={events} maxEvents={8} />
           </div>
 
