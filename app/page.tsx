@@ -209,15 +209,14 @@ export default function Home() {
         </div>
 
         {/* Event Log and Video Section */}
-        <div className="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
-          {/* Event Log - Animates width between 8 and 12 columns */}
+        <div className="mt-4 flex flex-col lg:flex-row gap-4">
+          {/* Event Log - Animates width between 66.67% and 100% */}
           <div
-            className={`transition-all duration-1000 ${
-              themeVariant === 'default' ? 'lg:col-span-8' : 'lg:col-span-12'
-            }`}
             style={{
               minHeight: '300px',
-              transitionTimingFunction: 'cubic-bezier(0.4, 0.0, 0.2, 1)'
+              width: '100%',
+              maxWidth: themeVariant === 'default' ? '66.67%' : '100%',
+              transition: 'max-width 1000ms cubic-bezier(0.4, 0.0, 0.2, 1)',
             }}
           >
             <EventLog events={events} maxEvents={8} />
@@ -225,7 +224,13 @@ export default function Home() {
 
           {/* Video Section - Only for Default theme */}
           {themeVariant === 'default' && (
-            <div className="lg:col-span-4 slide-in-right">
+            <div
+              className="slide-in-right"
+              style={{
+                width: '100%',
+                maxWidth: '33.33%',
+              }}
+            >
               <VideoPlayer
                 src="/videos/mac-demarco-garbage-funk.mp4"
                 title="Mac DeMarco - Garbage Funk"
