@@ -212,10 +212,13 @@ export default function Home() {
         <div className="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
           {/* Event Log - Animates width between 8 and 12 columns */}
           <div
-            className={`transition-all duration-500 ease-in-out ${
+            className={`transition-all duration-1000 ${
               themeVariant === 'default' ? 'lg:col-span-8' : 'lg:col-span-12'
             }`}
-            style={{ minHeight: '300px' }}
+            style={{
+              minHeight: '360px',
+              transitionTimingFunction: 'cubic-bezier(0.4, 0.0, 0.2, 1)'
+            }}
           >
             <EventLog events={events} maxEvents={8} />
           </div>
@@ -246,7 +249,7 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-4">
               <span className="te-label text-[8px]">Next.js + Tone.js</span>
-              <span className="te-label text-[8px]">v4.0</span>
+              <span className="te-label text-[8px]">v4.5</span>
             </div>
           </div>
         </footer>

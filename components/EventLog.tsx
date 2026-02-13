@@ -66,7 +66,7 @@ export default function EventLog({ events, maxEvents = 10 }: EventLogProps) {
         </div>
 
         {/* Event display - LED style */}
-        <div className="te-display flex-1 p-3">
+        <div className="te-display flex-1 p-3 flex flex-col">
           <div className="flex items-center justify-between mb-2">
             <span className="te-label text-[8px]">Event Log</span>
             <span className="te-label text-[8px]">
@@ -74,13 +74,13 @@ export default function EventLog({ events, maxEvents = 10 }: EventLogProps) {
             </span>
           </div>
           {displayEvents.length === 0 ? (
-            <div className="h-20 flex items-center justify-center">
+            <div className="flex-1 flex items-center justify-center">
               <span className="te-display-text text-xs opacity-50">
                 WAITING FOR EVENTS...
               </span>
             </div>
           ) : (
-            <div className="overflow-y-auto font-mono text-[11px]" style={{ maxHeight: '240px' }}>
+            <div className="overflow-y-auto font-mono text-[11px] flex-1">
               {displayEvents.map((event, index) => (
                 <div
                   key={event.id}

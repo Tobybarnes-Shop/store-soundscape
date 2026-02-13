@@ -24,7 +24,7 @@ export default function VideoPlayer({ src, title = 'Video' }: VideoPlayerProps) 
           playsInline
           className="w-full h-auto"
           style={{
-            maxHeight: '300px',
+            height: '300px',
             objectFit: 'contain',
           }}
         >
