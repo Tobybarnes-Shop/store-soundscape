@@ -5,11 +5,14 @@ import AudioControls from '@/components/AudioControls';
 import IntensityMeter from '@/components/IntensityMeter';
 import EventLog from '@/components/EventLog';
 import StoreSelector from '@/components/StoreSelector';
-import ThemeToggle from '@/components/ThemeToggle';
+import ColorModeSwitch from '@/components/ColorModeSwitch';
 import Mixer from '@/components/Mixer';
 import { AudioEngine, AudioEngineState, getAudioEngine } from '@/lib/audio/engine';
 import { EventGenerator } from '@/lib/events/generator';
 import { StoreEvent } from '@/lib/events/types';
+import { ThemeVariant, ColorMode, applyThemeStyles } from '@/lib/themes';
+
+const THEMES: ThemeVariant[] = ['default', 'medieval', 'riddim', 'vaporwave'];
 
 export default function Home() {
   const [audioState, setAudioState] = useState<AudioEngineState>('stopped');
@@ -17,8 +20,10 @@ export default function Home() {
   const [events, setEvents] = useState<StoreEvent[]>([]);
   const [intensityLevel, setIntensityLevel] = useState<'calm' | 'normal' | 'busy'>('normal');
   const [store, setStore] = useState('allbirds.myshopify.com');
-  const [theme, setTheme] = useState<'dark' | 'light'>('light');
+  const [themeVariant, setThemeVariant] = useState<ThemeVariant>('default');
+  const [colorMode, setColorMode] = useState<ColorMode>('light');
   const [mounted, setMounted] = useState(false);
+  const [masterVolume, setMasterVolume] = useState(0.7);
 
   const engineRef = useRef<AudioEngine | null>(null);
   const generatorRef = useRef<EventGenerator | null>(null);
@@ -26,12 +31,13 @@ export default function Home() {
   useEffect(() => {
     setMounted(true);
     try {
-      const savedTheme = localStorage.getItem('theme') as 'dark' | 'light' | null;
-      const initialTheme = savedTheme || 'light';
-      setTheme(initialTheme);
-      document.documentElement.setAttribute('data-theme', initialTheme);
+      const savedVariant = (localStorage.getItem('themeVariant') as ThemeVariant) || 'default';
+      const savedMode = (localStorage.getItem('colorMode') as ColorMode) || 'light';
+      setThemeVariant(savedVariant);
+      setColorMode(savedMode);
+      applyThemeStyles(savedVariant, savedMode);
     } catch {
-      document.documentElement.setAttribute('data-theme', 'light');
+      applyThemeStyles('default', 'light');
     }
   }, []);
 
@@ -59,12 +65,21 @@ export default function Home() {
     return unsubscribe;
   }, []);
 
-  const handleThemeToggle = useCallback(() => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-  }, [theme]);
+  const handleThemeVariantChange = useCallback((variant: ThemeVariant) => {
+    setThemeVariant(variant);
+    applyThemeStyles(variant, colorMode);
+    localStorage.setItem('themeVariant', variant);
+
+    // Switch audio theme if engine is running
+    engineRef.current?.switchTheme(variant);
+  }, [colorMode]);
+
+  const handleColorModeToggle = useCallback(() => {
+    const newMode = colorMode === 'dark' ? 'light' : 'dark';
+    setColorMode(newMode);
+    applyThemeStyles(themeVariant, newMode);
+    localStorage.setItem('colorMode', newMode);
+  }, [colorMode, themeVariant]);
 
   const handleStart = useCallback(async () => {
     if (!engineRef.current || !generatorRef.current) return;
@@ -82,6 +97,11 @@ export default function Home() {
   }, []);
 
   const handleVolumeChange = useCallback((volume: number) => {
+    engineRef.current?.setVolume(volume);
+  }, []);
+
+  const handleMasterVolumeChange = useCallback((volume: number) => {
+    setMasterVolume(volume);
     engineRef.current?.setVolume(volume);
   }, []);
 
@@ -116,8 +136,27 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <ThemeToggle theme={theme} onToggle={handleThemeToggle} />
+            <div className="flex items-start gap-6">
+              {/* Theme Buttons - Skeuomorphic hardware buttons */}
+              <div className="flex flex-col gap-2">
+                <span className="te-label text-[8px]">Theme</span>
+                <div className="flex gap-2">
+                  {(['default', 'medieval', 'riddim', 'vaporwave'] as const).map((theme) => (
+                    <button
+                      key={theme}
+                      onClick={() => handleThemeVariantChange(theme)}
+                      className={`te-button ${themeVariant === theme ? 'te-button-primary' : ''} px-3 py-2`}
+                    >
+                      {theme === 'default' ? 'DEF' : theme === 'medieval' ? 'MED' : theme === 'riddim' ? 'RID' : 'VAP'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {/* Skeuomorphic Mode Switch - aligned with buttons */}
+              <div className="flex flex-col gap-2">
+                <span className="te-label text-[8px]">Mode</span>
+                <ColorModeSwitch mode={colorMode} onToggle={handleColorModeToggle} />
+              </div>
             </div>
           </div>
         </header>
@@ -135,9 +174,9 @@ export default function Home() {
         {/* Main Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
           {/* Left Column: Store + Store Traffic stacked */}
-          <div className="lg:col-span-3 flex flex-col gap-4 lg:h-[280px]">
+          <div className="lg:col-span-3 flex flex-col gap-4">
             <StoreSelector value={store} onChange={handleStoreChange} />
-            <div className="te-panel p-3 flex-1">
+            <div className="te-panel p-3">
               <span className="te-label text-[8px] block mb-2">Store Traffic</span>
               <div className="flex gap-1">
                 {(['calm', 'normal', 'busy'] as const).map((level) => (
@@ -158,12 +197,12 @@ export default function Home() {
           </div>
 
           {/* Middle: Activity */}
-          <div className="lg:col-span-4 lg:h-[280px]">
+          <div className="lg:col-span-4">
             <IntensityMeter intensity={intensity} />
           </div>
 
           {/* Right: Mixer */}
-          <div className="lg:col-span-5 lg:h-[280px]">
+          <div className="lg:col-span-5">
             <Mixer engine={engineRef.current} />
           </div>
         </div>
@@ -188,7 +227,7 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-4">
               <span className="te-label text-[8px]">Next.js + Tone.js</span>
-              <span className="te-label text-[8px]">v1.0.17</span>
+              <span className="te-label text-[8px]">v3.0</span>
             </div>
           </div>
         </footer>

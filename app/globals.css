@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
-/* Light theme (default) - Teenage Engineering inspired */
+/* ============================================
+   DEFAULT THEME - Teenage Engineering inspired
+   ============================================ */
+
+/* Default Light */
 :root,
-[data-theme="light"] {
+[data-theme="default"][data-mode="light"] {
   --background: #e8e4dc;
   --foreground: #1a1a1a;
   --accent: #ff6b00;
@@ -16,8 +20,8 @@
   --button-shadow: #c8c4bc;
 }
 
-/* Dark theme */
-[data-theme="dark"] {
+/* Default Dark */
+[data-theme="default"][data-mode="dark"] {
   --background: #2a2a28;
   --foreground: #f2efe8;
   --accent: #ff6b00;
@@ -29,6 +33,108 @@
   --display-bg: #0a0f0d;
   --display-text: #4ade80;
   --button-shadow: #1a1a18;
+}
+
+/* ============================================
+   MEDIEVAL THEME - Merchant's Tavern
+   ============================================ */
+
+/* Medieval Light - Parchment & Daylight Stone */
+[data-theme="medieval"][data-mode="light"] {
+  --background: #f5f0e8;
+  --foreground: #2d2520;
+  --accent: #b8860b;
+  --accent-green: #4a6741;
+  --surface: #ebe4d8;
+  --surface-raised: #f8f4ec;
+  --border: #c9b899;
+  --muted: #8b7d6b;
+  --display-bg: #2d2520;
+  --display-text: #d4af37;
+  --button-shadow: #b5a689;
+}
+
+/* Medieval Dark - Medieval Manuscript */
+[data-theme="medieval"][data-mode="dark"] {
+  --background: #0a0a08;
+  --foreground: #f4e4c0;
+  --accent: #f4c430;
+  --accent-green: #8b1a1a;
+  --surface: #1a1410;
+  --surface-raised: #2a2420;
+  --border: #3a3430;
+  --muted: #6b5d50;
+  --display-bg: #0a0a08;
+  --display-text: #f4c430;
+  --button-shadow: #0a0a08;
+}
+
+/* ============================================
+   RIDDIM THEME - Caribbean Vibes
+   ============================================ */
+
+/* Riddim Light - Tropical Daytime */
+[data-theme="riddim"][data-mode="light"] {
+  --background: #f5f5f0;
+  --foreground: #1a3320;
+  --accent: #ff5722;
+  --accent-green: #2d7a5a;
+  --surface: #e8dcc0;
+  --surface-raised: #f8f4ec;
+  --border: #d4c5a9;
+  --muted: #8a7d6b;
+  --display-bg: #2d7a5a;
+  --display-text: #0fdb8a;
+  --button-shadow: #b8a888;
+}
+
+/* Riddim Dark - Dub Studio Night */
+[data-theme="riddim"][data-mode="dark"] {
+  --background: #3a3530;
+  --foreground: #e8e4d8;
+  --accent: #ff5722;
+  --accent-green: #0fdb8a;
+  --surface: #4a453d;
+  --surface-raised: #5a5448;
+  --border: #6a6050;
+  --muted: #7a7560;
+  --display-bg: #1a1a18;
+  --display-text: #0fdb8a;
+  --button-shadow: #1a1a18;
+}
+
+/* ============================================
+   VAPORWAVE THEME - Late Night Mall
+   ============================================ */
+
+/* Vaporwave Light - Daytime Mall (Pastel) */
+[data-theme="vaporwave"][data-mode="light"] {
+  --background: #fef5ff;
+  --foreground: #2d1b3d;
+  --accent: #ff6ec7;
+  --accent-green: #00ffcc;
+  --surface: #f0e6ff;
+  --surface-raised: #fdf0ff;
+  --border: #d4a5ff;
+  --muted: #9d7db5;
+  --display-bg: #1a0d2e;
+  --display-text: #00ffcc;
+  --button-shadow: #c295ff;
+}
+
+/* Vaporwave Dark - Midnight Mall (Neon) */
+[data-theme="vaporwave"][data-mode="dark"] {
+  --background: #1a0d2e;
+  --foreground: #ffd4ff;
+  --accent: #ff00ff;
+  --accent-green: #00ffff;
+  --surface: #2d1b3d;
+  --surface-raised: #3d2a4d;
+  --border: #5d4a6d;
+  --muted: #8d7a9d;
+  --display-bg: #0a0514;
+  --display-text: #00ffff;
+  --button-shadow: #0a0514;
 }
 
 @theme inline {
