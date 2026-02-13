@@ -19,7 +19,9 @@ export default function VideoPlayer({ src, title = 'Video' }: VideoPlayerProps) 
           src={src}
           controls
           muted
+          autoPlay
           loop
+          playsInline
           className="w-full h-auto"
           style={{
             maxHeight: '300px',

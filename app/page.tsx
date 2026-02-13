@@ -208,20 +208,23 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Event Log - Full width */}
-        <div className="mt-4">
-          <EventLog events={events} maxEvents={8} />
-        </div>
-
-        {/* Video Section - Only for Default theme */}
-        {themeVariant === 'default' && (
-          <div className="mt-4">
-            <VideoPlayer
-              src="/videos/mac-demarco-garbage-funk.mp4"
-              title="Mac DeMarco - Garbage Funk"
-            />
+        {/* Event Log and Video Section */}
+        <div className="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
+          {/* Event Log */}
+          <div className={themeVariant === 'default' ? 'lg:col-span-8' : 'lg:col-span-12'}>
+            <EventLog events={events} maxEvents={8} />
           </div>
-        )}
+
+          {/* Video Section - Only for Default theme */}
+          {themeVariant === 'default' && (
+            <div className="lg:col-span-4">
+              <VideoPlayer
+                src="/videos/mac-demarco-garbage-funk.mp4"
+                title="Mac DeMarco - Garbage Funk"
+              />
+            </div>
+          )}
+        </div>
 
         {/* Footer - Bottom panel with ports */}
         <footer className="te-panel p-3 mt-4">
