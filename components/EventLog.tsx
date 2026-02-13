@@ -39,8 +39,8 @@ export default function EventLog({ events, maxEvents = 10 }: EventLogProps) {
   const displayEvents = events.slice(-maxEvents).reverse();
 
   return (
-    <div className="te-panel p-4">
-      <div className="flex gap-4">
+    <div className="te-panel p-4 h-full flex flex-col">
+      <div className="flex gap-4 flex-1">
         {/* Stats column */}
         <div className="flex gap-2 flex-shrink-0">
           {[
