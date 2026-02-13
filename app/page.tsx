@@ -213,7 +213,7 @@ export default function Home() {
           {/* Event Log - Animates width between 66.67% and 100% */}
           <div
             style={{
-              minHeight: '300px',
+              height: '348px',
               width: '100%',
               maxWidth: themeVariant === 'default' ? '66.67%' : '100%',
               transition: 'max-width 1000ms cubic-bezier(0.4, 0.0, 0.2, 1)',
@@ -225,7 +225,7 @@ export default function Home() {
           {/* Video Section - Always rendered, animated width */}
           <div
             style={{
-              minHeight: '300px',
+              height: '348px',
               width: '100%',
               maxWidth: themeVariant === 'default' ? '33.33%' : '0%',
               opacity: themeVariant === 'default' ? 1 : 0,
