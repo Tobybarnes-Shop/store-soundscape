@@ -222,23 +222,24 @@ export default function Home() {
             <EventLog events={events} maxEvents={8} />
           </div>
 
-          {/* Video Section - Only for Default theme */}
-          {themeVariant === 'default' && (
-            <div
-              style={{
-                width: '100%',
-                maxWidth: '33.33%',
-                opacity: 1,
-                transform: 'translateX(0)',
-                transition: 'opacity 1000ms cubic-bezier(0.4, 0.0, 0.2, 1), transform 1000ms cubic-bezier(0.4, 0.0, 0.2, 1)',
-              }}
-            >
+          {/* Video Section - Always rendered, animated width */}
+          <div
+            style={{
+              minHeight: '300px',
+              width: '100%',
+              maxWidth: themeVariant === 'default' ? '33.33%' : '0%',
+              opacity: themeVariant === 'default' ? 1 : 0,
+              overflow: 'hidden',
+              transition: 'max-width 1000ms cubic-bezier(0.4, 0.0, 0.2, 1), opacity 1000ms cubic-bezier(0.4, 0.0, 0.2, 1)',
+            }}
+          >
+            {themeVariant === 'default' && (
               <VideoPlayer
                 src="/videos/mac-demarco-garbage-funk.mp4"
                 title="Mac DeMarco - Garbage Funk"
               />
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         {/* Footer - Bottom panel with ports */}
